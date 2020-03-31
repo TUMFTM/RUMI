@@ -55,7 +55,8 @@ class LMSEstimator:
             self.diff_weight_log.append(np.linalg.norm(weight_opt - self.model.weights))
 
         # update weights
-        self.model.weights += self.hyperparam['gamma'] * np.matmul(np.matmul(x_mat.T, m_mat), residuals)
+        self.model.weights = self.model.weights +\
+                             self.hyperparam['gamma'] * np.matmul(np.matmul(x_mat.T, m_mat), residuals)
 
         return residuals
 
