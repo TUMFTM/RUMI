@@ -13,9 +13,9 @@ on embedded systems
 
 #### How it works
 The algorithm combines a normalized least mean squares algorithm with a quantile estimator for uncertainty quantification. It delivers an upper and lower bound which are allowed to depend on an arbitrary number of features. These can also be
-states or inputs of the dynamic system. RUMI is based on a batch formulation, its final result are bounds that cover a certain proportion of the data in each batch. Details on the algorithm are available in:
+states or inputs of the dynamic system. RUMI is based on a batch formulation, its final result are bounds that cover a certain proportion of the data in each batch. Details on the algorithm are under review in:
 
-A. Wischnewski, J. Betz, and B. Lohmann, *Real-Time Learning of Non-Gaussian Uncertainty Models for Robust Control in Autonomous Racing* (2020)
+A. Wischnewski, J. Betz, and B. Lohmann, *Real-Time Learning of Non-Gaussian Uncertainty Models for Autonomous Racing*
 
 Please cite this publication when using the software provided in this repository.
 
