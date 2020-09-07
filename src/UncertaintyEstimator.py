@@ -18,6 +18,8 @@ class UncertaintyEstimator:
         self.ub_log = np.zeros_like(dataset.y_data)
         self.lb_log = np.zeros_like(dataset.y_data)
         self.perc_log = np.zeros_like(dataset.y_data)
+        self.calc_time = []
+        self.overall_time = 0
 
         # transform data into batches according to batch length
         self.n_batches = int(np.floor(len(self.dataset.y_data) / self.param['N']))
@@ -27,24 +29,30 @@ class UncertaintyEstimator:
                                     newshape=(self.param['N'], self.n_batches)).T
 
         if self.param['verbose']:
-            print('Uncertainty estimator of type ' + self.estimator.type + ' successfully initialized ...')
+            print('Uncertainty estimator of type {} successfully initialized ...'.format(self.estimator.type))
 
     def learn(self, debug=False):
 
         if self.param['verbose']:
-            print('Start learning of ' + self.estimator.type + ' uncertainty model ...')
+            print('Start learning of {} uncertainty model ...'.format(self.estimator.type))
 
+        # measure overall learning time
+        start_overall = time.time()
         for x, y, idx in zip(self.x_batch, self.y_batch, range(self.n_batches)):
             # evaluate estimator before updating to benchmark to prediction performance
             self.evaluate_estimator(np.expand_dims(x, axis=1), np.expand_dims(y, axis=1), idx)
             # update estimator
+            start = time.time()
             self.estimator.update(np.expand_dims(x, axis=1), np.expand_dims(y, axis=1), debug=debug)
+            end = time.time()
+            # save elapsed time
+            self.calc_time.append(end-start)
             if self.param['verbose']:
-                print('Done with {} of {} batches ...'.format(idx, self.n_batches))
+                print('Done with {} of {} batches and it took {} s ...'.format(idx, self.n_batches, end-start))
 
-        if self.param['verbose']:
-            print('Done with learning of ' + self.estimator.type + ' uncertainty model ...')
-            print('')
+        self.overall_time = time.time() - start_overall
+        print('Done with learning of {} uncertainty model using {} batches and it took {:6.5f} ms in average ...'.format(self.estimator.type, self.n_batches, 1000*self.overall_time/self.n_batches))
+        print('')
 
     def evaluate_estimator(self, x, y, idx):
 

@@ -1,5 +1,9 @@
 import pickle
 import numpy as np
+import os, sys
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
 
 from src.RUMIEstimator import RUMIEstimator
 from src.GPREstimator import GPREstimator
@@ -12,7 +16,7 @@ def dist_comparison():
     # parameters
     n_datasets = 20
     n_samples = 60000
-    path = 'output/'
+    path = os.path.join(os.path.join(top_folder, '..', '..'), 'paper_results', 'output')
 
     # set disturbance models
     disturbances = ['gaussian', 'nongaussian']
@@ -103,7 +107,7 @@ def dist_comparison():
         full_data = [[gpr_estimators, 'GPR - ' + disturbance_type],
                      [blr_estimators, 'BLR - ' + disturbance_type],
                      [rumi_estimators, 'RUMI - ' + disturbance_type]]
-        pickle.dump(full_data, open(path + "disturbance_variation_" + disturbance_type + ".p", "wb"))
+        pickle.dump(full_data, open(path + "\disturbance_variation_" + disturbance_type + ".p", "wb"))
 
 
 dist_comparison()

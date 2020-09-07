@@ -1,9 +1,13 @@
 import pickle
+import os, sys
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
 from src.Visualizer import Visualizer
 
-input_file = '../paper_results/output/disturbance_variation_nongaussian.p'
+input_file = 'paper_results/output/disturbance_variation_nongaussian.p'
 # output files (set to none for plotting)
-output_file = 'output/disturbance_variation_nongaussian.tex'
+output_file = None #'paper_plots/output/disturbance_variation_nongaussian.tex'
 data_selector = lambda x: 100*x.perc_log
 
 plot_options = {

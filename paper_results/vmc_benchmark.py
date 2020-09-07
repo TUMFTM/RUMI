@@ -1,5 +1,9 @@
 import pickle
 import numpy as np
+import os, sys
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
 
 from src.RUMIEstimator import RUMIEstimator
 from src.GPREstimator import GPREstimator
@@ -10,13 +14,13 @@ from src.DataGeneration import DataGeneration
 
 def vmc_benchmark():
     # parameters
-    path = '../paper_results/output/'
+    path = 'paper_results/output/'
 
     # The data used for training has been generated with the vehicle dynamics simulation and controller
     # of the TUM Roborace project. These are available in an open source version from https://github.com/TUMFTM.
 
     # load dataset to be used for training
-    data = np.loadtxt('../input/Modena_UncertaintyEstimation.csv', delimiter=',')
+    data = np.loadtxt('input/Modena_UncertaintyEstimation.csv', delimiter=',')
 
     # extract feature variables
     ay_target_mps2 = np.expand_dims(data[10000:250000:5, 6], axis=1)

@@ -26,12 +26,12 @@ class LMSEstimator:
         x_mat = self.model.basis_fun(x_data)
         # define function handle for construction of weights for regression
         m_construct = lambda v: self.hyperparam['mu'] / (1 + self.hyperparam['mu']*np.dot(v, v))
-        m_weights = np.apply_along_axis(m_construct, 1, x_mat)
         m_mat = np.diag(np.apply_along_axis(m_construct, 1, x_mat))
 
         # calculate additional debug information
         if debug:
             # calculate l2 optimal solution for batch
+            m_weights = np.apply_along_axis(m_construct, 1, x_mat)
             Aw = np.diag(np.sqrt(m_weights))@x_mat
             Bw = np.diag(np.sqrt(m_weights))@y_data
             weight_opt, _, _, _ = np.linalg.lstsq(Aw, Bw, rcond=None)

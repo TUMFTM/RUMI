@@ -1,5 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os, sys
+
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
+
 from src.DataGeneration import DataGeneration
 from src.RUMIEstimator import RUMIEstimator
 from src.UncertaintyEstimator import UncertaintyEstimator
@@ -13,7 +19,7 @@ def check_bounds(hyperparam, debug_data, n_batches, diff_weight_log, show=False)
         return False
 
     # store polynomial coefficients without disturbance energy
-    p2 = hyperparam['gamma']**2*debug_data['sigma_upper']**2 - 2*hyperparam['gamma']*debug_data['sigma_lower']
+    p2 = -(2*hyperparam['gamma']*debug_data['sigma_lower'] - (hyperparam['gamma']*debug_data['sigma_lower'])**2)
     p1 = 2*debug_data['delta_opt_solution']*(1-hyperparam['gamma']*debug_data['sigma_lower'])
     p0 = debug_data['delta_opt_solution']**2
     lyap_poly = np.poly1d([p2, p1, p0])
@@ -46,12 +52,12 @@ def check_bounds(hyperparam, debug_data, n_batches, diff_weight_log, show=False)
 # create a test dataset
 w0 = np.expand_dims(np.array([1]), axis=1)
 datasets = []
-for n in range(100):
-    datasets.append(DataGeneration.linear_model(n_samples=100000, feature_type='random', noise_type='gaussian',
+for n in range(50):
+    datasets.append(DataGeneration.linear_model(n_samples=300000, feature_type='random', noise_type='gaussian',
                                                 x_spread=4, w0=w0))
 
 param_UE = {
-    'N': 1000,
+    'N': 3000,
     'verbose': False
 }
 
@@ -91,12 +97,13 @@ for dataset in datasets:
     uncertainty_est.learn(debug=True)
 
     # evaluate bounds derived in paper on this example
+    # set show to false to run all testcases automatically
     if not check_bounds(hyperparam_LMS, uncertainty_est.estimator.lmse.get_debug_results(),
                  uncertainty_est.n_batches, uncertainty_est.estimator.lmse.diff_weight_log, show=True):
         counter += 1
 
-    uncertainty_est.visualize_model(dataset.x_data, dataset.y_data)
-    plt.show()
-
+    # comment out to run all testcases automatically
+    # uncertainty_est.visualize_model(dataset.x_data, dataset.y_data)
+    # plt.show()
 
 print('Final number of violations is: ' + str(counter))

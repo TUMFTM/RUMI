@@ -2,6 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import tikzplotlib
+import os, sys
+
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
 
 from src.DataGeneration import DataGeneration
 

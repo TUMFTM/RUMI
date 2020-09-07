@@ -1,11 +1,18 @@
 import pickle
+
+import os, sys
+
+# add top folder to pyton path
+top_folder = os.path.abspath(__file__)
+sys.path.append(os.path.join(top_folder, '..', '..'))
+
 from src.Visualizer import Visualizer
 
-input_file = '../paper_results/output/VMC.p'
+input_file = 'paper_results/output/VMC.p'
 # output files (set to none for plotting)
-output_file_1 = 'output/VMC_dist_prediction.tex'
-output_file_2 = 'output/VMC_Residuals.tex'
-output_file_3 = 'output/VMC_Percentage.tex'
+output_file_1 = None #'../output/VMC_dist_prediction.tex'
+output_file_2 = None # '../output/VMC_Residuals.tex'
+output_file_3 = None # '../output/VMC_Percentage.tex'
 label = 'Empiric percentage'
 data_selector = lambda x: 100*x.perc_log
 
